@@ -1,0 +1,36 @@
+@import url('form.css');
+@import url('style.css');
+@import url('profile.css');
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+}
+
+.game-container {
+    text-align: center;
+}
+
+.betting {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.bet-input {
+    margin-right: 10px;
+}
+
+#balance {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+#result {
+    font-size: 48px;
+    margin-top: 20px;
+}

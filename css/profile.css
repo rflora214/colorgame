@@ -1,0 +1,37 @@
+.profile-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    width: 500px;
+}
+
+.profile-picture {
+    margin-right: 20px;
+}
+
+.profile-picture img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.profile-details {
+    flex: 1;
+}
+
+.profile-details h2 {
+    margin: 0;
+    font-size: 24px;
+    color: #333;
+}
+
+.profile-details .balance {
+    font-size: 18px;
+    color: #4CAF50;
+    font-weight: bold;
+    margin-top: 5px;
+}

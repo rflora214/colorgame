@@ -1,0 +1,490 @@
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f4f4f4;
+}
+
+.notification {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    padding: 10px 20px;
+    color: white;
+    background-color: green;
+    border-radius: 5px;
+    z-index: 1000;
+    opacity: 0.9;
+    transition: opacity 0.3s;
+}
+
+.notification.error {
+    background-color: red;
+}
+
+.close-btn {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    margin-left: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.close-btn:hover {
+    background-color: #555;
+}
+
+.countdown {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    font-size: 30px;
+    font-weight: bold;
+    padding: 10px 0;
+    z-index: 2000;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(3, 150px);
+    grid-gap: 10px;
+    /* margin-top: 120px; */
+    /* Adds space below the countdown timer */
+}
+
+.box {
+
+    width: 150px;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    /* Smooth scaling effect */
+}
+
+.box1 {
+    background-color: #ff5733;
+}
+
+/* Red */
+.box2 {
+    background-color: #33c1ff;
+}
+
+/* Blue */
+.box3 {
+    background-color: #33ff57;
+}
+
+/* Green */
+.box4 {
+    background-color: #ffc133;
+}
+
+/* Yellow */
+.box5 {
+    background-color: #8d33ff;
+}
+
+/* Purple */
+.box6 {
+    background-color: #ff3380;
+}
+
+/* Pink */
+
+.highlighted {
+    /* border: 2px solid black; */
+    /* Highlighting style */
+    transform: scale(1.03);
+    /* Slightly scale the box for emphasis */
+}
+
+
+.balance {
+    margin-top: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Notification for Start Betting */
+.betting-notification {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #ffcc00;
+    position: relative;
+    background: #444;
+    padding: 10px;
+    width: 200px;
+    margin: auto;
+    text-align: center;
+    border-radius: 38px;
+}
+
+/* Circular Loader */
+.xloader {
+    border: 3px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 3px solid #ffcc00;
+    width: 20px;
+    height: 20px;
+    animation: spin 2s linear infinite;
+    margin-right: 15px;
+}
+
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* Parent container for result text and boxes */
+.result-container {
+    display: flex;
+    flex-direction: column;
+    /* Stack items vertically */
+    align-items: center;
+    /* Center items horizontally */
+    justify-content: center;
+    /* Center items vertically if height allows */
+    /* height: 100vh; */
+    /* Full viewport height for vertical centering */
+    background-color: #f9f9f9;
+    /* Light background for contrast */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Styling for the result text */
+.result-text {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    /* Space between text and boxes */
+    color: #333;
+}
+
+/* Container for three smaller boxes */
+.smaller-boxes {
+    display: grid;
+    grid-template-columns: repeat(3, 70px);
+    /* Three columns, 70px each */
+    grid-gap: 10px;
+    /* Space between boxes */
+    margin: 0 auto;
+    /* Center the grid container horizontally */
+}
+
+/* Individual small box styling */
+.small-box {
+    width: 70px;
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    /* background-color: #666; */
+    border-radius: 8px;
+    /* Rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow for depth */
+    transition: background-color 0.3s, transform 0.3s;
+    /* Smooth hover effects */
+    /* cursor: pointer; */
+    /* Pointer cursor on hover */
+}
+
+/* HTML: <div class="loader"></div> */
+.loader {
+    margin: 5px;
+    width: 40px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background:
+        radial-gradient(farthest-side, #ED303C 94%, #0000),
+        radial-gradient(farthest-side, #3B8183 94%, #0000),
+        radial-gradient(farthest-side, #FAD089 94%, #0000),
+        radial-gradient(farthest-side, #FF9C5B 94%, #0000),
+        #ED303C;
+    background-size: 105% 105%;
+    background-repeat: no-repeat;
+    animation: l5 2s infinite;
+}
+
+@keyframes l5 {
+    0% {
+        background-position: 50% -50px, -40px 50%, 50% calc(100% + 50px), calc(100% + 50px) 50%
+    }
+
+    20%,
+    25% {
+        background-position: 50% -50px, -50px 50%, 50% calc(100% + 50px), 50% 50%
+    }
+
+    45%,
+    50% {
+        background-position: 50% -50px, -50px 50%, 50% 50%, 50% 50%
+    }
+
+    75%,
+    75% {
+        background-position: 50% -50px, 50% 50%, 50% 50%, 50% 50%
+    }
+
+    95%,
+    100% {
+        background-position: 50% 50%, 50% 50%, 50% 50%, 50% 50%
+    }
+}
+
+
+.bet-counter {
+    font-size: 20pt;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+
+.bet-counter {
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* Center the bet-counter vertically and horizontally */
+}
+
+.win-status {
+    position: absolute;
+    bottom: 10px;
+    /* Place it 10px from the bottom of the box */
+    /* width: 100%; */
+    text-align: center;
+    font-size: 16px;
+    background-color: #f3f3f3;
+    padding: 2px 5px;
+    color: #000;
+    border-radius: 4px;
+    /* You can adjust font size and other styles as needed */
+}
+
+.box {
+    position: relative;
+    /* Ensure we can use absolute positioning inside the box */
+    width: 150px;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    /* Smooth scaling effect */
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+        color: inherit;
+    }
+
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+        transform: translateX(-10px);
+        color: red;
+    }
+
+    20%,
+    40%,
+    60%,
+    80% {
+        transform: translateX(10px);
+        color: red;
+    }
+}
+
+/* Class to trigger the shake animation */
+.shake {
+    animation: shake 0.5s ease;
+}
+
+/* Style for the close (cancel) text "void" */
+.close-icon {
+    position: absolute;
+    top: 50px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    color: red;
+}
+
+.close-icon:hover {
+    color: darkred;
+}
+
+
+
+.bet-select-container {
+    margin-top: 120px;
+    margin-bottom: 10px;
+    font-family: Arial, sans-serif;
+}
+
+.bet-select-container label {
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+.bet-select {
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease;
+}
+
+.bet-select:focus {
+    border-color: #007bff;
+    /* Highlight the border on focus */
+    outline: none;
+}
+
+.bet-select option {
+    padding: 10px;
+}
+
+
+
+a {
+    position: absolute;
+    top: 60%;
+    right: 5px;
+    text-decoration: none;
+}
+
+.parent {
+    position: relative;
+}
+
+.lose_box {
+    opacity: 0.1;
+}
+
+.circle {
+    margin-top: 5px;
+    /* width: 20px; */
+    /* width: 100px; */
+    /* height: 100px; */
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* font-size: 24px; */
+    font-weight: bold;
+    /* color: black; */
+    /* border: 2px solid black; */
+}
+
+
+/* Floating User Icons */
+.user-column {
+    position: absolute;
+    left: 50px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.user-profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.user-icon {
+    width: 50px;
+    height: 50px;
+    background-color: #ddd;
+    border-radius: 50%;
+    border: 2px solid #333;
+    /* background-image: url('usericon/001-guarani.png'); */
+    /* Placeholder image */
+    background-size: cover;
+    background-position: center;
+}
+
+.user-name {
+    font-size: 12px;
+    color: #333;
+}
+
+
+
+.chip-left,
+.chip-right {
+    position: absolute;
+    width: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.chip-left {
+    top: 15px;
+    left: 15px;
+}
+
+.chip-right {
+    top: 15px;
+    right: 15px;
+}
+
+.chip-left img,
+.chip-right img {
+    width: 30px;
+    height: 30px;
+}
+
+.chip-value {
+    font-size: 12px;
+    color: #333;
+    text-align: center;
+}

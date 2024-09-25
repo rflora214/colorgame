@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bet Game</title>
+    <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <link id="dynamic-stylesheet" rel="stylesheet" href="css/main.css?">
+
+</head>
+
+<body>
+
+    <div class="profile-container">
+        <div class="profile-picture">
+            <img id="profile-img" src="https://via.placeholder.com/100" alt="Profile Picture">
+        </div>
+        <div class="profile-details">
+            <h1 id="uid">John Doe</h1>
+            <p id="balance">Balance: $1,500.00</p>
+        </div>
+    </div>
+
+
+    <div class="floating-form">
+        <h2>Player Info</h2>
+        <form>
+            <label for="playerName">Player Name:</label>
+            <input type="text" id="playerName" name="playerName" placeholder="Enter player name"
+                value="" required>
+
+            <label for=" balance">Balance:</label>
+            <input type="number" id="init_balance" name="balance" placeholder="Enter balance" value="1000" required>
+
+            <input type="button" value="Submit" id="login">
+        </form>
+    </div>
+
+
+    <!-- Floating User Icons with Name -->
+    <div class="user-column">
+
+    </div>
+
+
+    <div class="game-container">
+
+        <div id="betStatus"></div>
+        <div id="result"></div>
+
+
+        <!-- Countdown Timer -->
+        <div class="countdown" id="countdown">Countdown: 12 seconds</div>
+
+        <!-- Notification -->
+        <div class="notification">
+            Win $100
+            <div id="result-box" class="box"></div>
+            <button class="close-btn" onclick="closeNotification()">Close</button>
+        </div>
+
+        <!-- Result Text and Smaller Boxes -->
+        <div id="resultdiplay-div">
+            <div class="result-container">
+                <div class="result-text">Result</div>
+                <div class="smaller-boxes">
+                    <div class="small-box" id="small-box-1"></div>
+                    <div class="small-box" id="small-box-2"></div>
+                    <div class="small-box" id="small-box-3"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="bet-close-div" class="betting-notification">
+            &nbsp;&nbsp;&nbsp;Stop Betting
+        </div>
+
+
+        <div id="bet-open-div" class="betting-notification">
+            <div class="loader">
+                <span id="timeLeft" class="circle">1</span>
+            </div>
+            Start Betting
+        </div>
+
+
+
+        <!-- Bet Amount Dropdown -->
+        <div class="bet-select-container">
+            <label for="betAmount">Select Bet Amount:</label>
+            <select id="betAmount" class="bet-select">
+                <option value="1">1</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="200">200</option>
+                <option value="500" selected>500</option>
+                <option value="1000">1,000</option>
+                <option value="5000">5,000</option>
+                <option value="10000">10,000</option>
+            </select>
+        </div>
+
+        <!-- Colored Boxes -->
+        <style>
+        .timex {
+            font-size: 50pt;
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            color: white;
+        }
+        </style>
+
+        <div class="container">
+
+            <div class="box1 parent">
+
+                <div class="chip-left" id="chips-1">
+                    <img src="usericon/poker-chip.png" alt="Casino Chip">
+                    <div class="chip-value"></div>
+                </div>
+                <span class="timex"></span>
+                <div class="betbox box "><span id="bet-counter-1" class="bet-counter"></span><span class="win-status"
+                        id="win-status-1">win</span></div><a href="#" class="cancel-btn">⃠</a>
+            </div>
+
+            <div class="box2 parent">
+                <div class="chip-left" id="chips-2">
+                    <img src="usericon/poker-chip.png" alt="Casino Chip">
+                    <div class="chip-value"></div>
+                </div>
+                <span class="timex"></span>
+                <div class="betbox box"><span id="bet-counter-2" class="bet-counter"></span><span class="win-status"
+                        id="win-status-2">win</span></div><a href="#" class="cancel-btn">⃠</a>
+            </div>
+
+            <div class="box3 parent">
+                <div class="chip-left" id="chips-3">
+                    <img src="usericon/poker-chip.png" alt="Casino Chip">
+                    <div class="chip-value"></div>
+                </div>
+                <span class="timex"></span>
+                <div class="betbox box"><span id="bet-counter-3" class="bet-counter"></span><span class="win-status"
+                        id="win-status-3">win</span></div><a href="#" class="cancel-btn">⃠</a>
+            </div>
+
+            <div class="box4 parent">
+                <div class="chip-left" id="chips-4">
+                    <img src="usericon/poker-chip.png" alt="Casino Chip">
+                    <div class="chip-value"></div>
+                </div>
+                <span class="timex"></span>
+                <div class="betbox box"><span id="bet-counter-4" class="bet-counter"></span><span class="win-status"
+                        id="win-status-4">win</span></div><a href="#" class="cancel-btn">⃠</a>
+            </div>
+
+            <div class="box5 parent">
+                <div class="chip-left" id="chips-5">
+                    <img src="usericon/poker-chip.png" alt="Casino Chip">
+                    <div class="chip-value"></div>
+                </div>
+                <span class="timex"></span>
+                <div class="betbox box"><span id="bet-counter-5" class="bet-counter"></span><span class="win-status"
+                        id="win-status-5">win</span></div><a href="#" class="cancel-btn">⃠</a>
+            </div>
+
+            <div class="box6 parent">
+                <div class="chip-left" id="chips-6">
+                    <img src="usericon/poker-chip.png" alt="Casino Chip">
+                    <div class="chip-value"></div>
+                </div>
+                <span class="timex"></span>
+                <div class="betbox box"><span id="bet-counter-6" class="bet-counter"></span><span class="win-status"
+                        id="win-status-6">win</span></div><a href="#" class="cancel-btn">⃠</a>
+            </div>
+
+            <!-- <div class="box box2 betbox"><span id="bet-counter-2" class="bet-counter"></span><span class="win-status" id="win-status-2">win</span></div>
+    <div class="box box3 betbox"><span id="bet-counter-3" class="bet-counter"></span><span class="win-status" id="win-status-3">win</span></div>
+    <div class="box box4 betbox"><span id="bet-counter-4" class="bet-counter"></span><span class="win-status" id="win-status-4">win</span></div>
+    <div class="box box5 betbox"><span id="bet-counter-5" class="bet-counter"></span><span class="win-status" id="win-status-5">win</span></div>
+    <div class="box box6 betbox"><span id="bet-counter-6" class="bet-counter"></span><span class="win-status" id="win-status-6">win</span></div> -->
+        </div>
+
+
+        <!-- Balance Display -->
+        <!-- <div class="balance" id="balance">Balance: $1000.00</div> -->
+    </div>
+
+
+
+
+
+    <script>
+    const socket = io('http://localhost:3000'); // Connect to the server
+
+    // Reference to HTML elements
+    const balanceDiv = document.getElementById('balance');
+    const resultDiv = document.getElementById('result');
+    const betStatusDiv = document.getElementById('betStatus');
+    const betAmountInput = document.getElementById('betAmount');
+    const betNumberInput = document.getElementById('betNumber');
+    const placeBetButton = document.getElementById('placeBetButton');
+    const resultbox = document.getElementById('result-box');
+
+    // Player's initial balance
+    let playerBalance;
+
+    // Update the balance display
+    function updateBalance(balance) {
+        playerBalance = balance;
+        balanceDiv.textContent = `Balance: $${balance}`;
+    }
+
+    $("#login").click(function() {
+        playerBalance = parseInt($("#init_balance").val());
+        animateBalanceIncrease(0, playerBalance);
+        updateBalance(playerBalance)
+
+        socket.emit('login', {
+            username: $("#playerName").val(),
+            balance: playerBalance,
+        });
+        $(".floating-form").hide()
+
+    })
+
+    // Handle the "welcome" event from the server
+    socket.on('welcome', (data) => {
+        $("h1").html(data.socketid)
+        updateBalance(data.balance);
+        // if (data.result) {
+        isClickActive = data.bettingStatus;
+        if (data.bettingStatus) {
+            openbet()
+        } else {
+            closebet()
+        }
+        console.log(isClickActive)
+        //resultDiv.textContent = `Last result: ${data.result}`; 
+        // }
+    });
+
+    function show_bet_counter() {
+        $(".betbox").find(".bet-counter").show();
+    }
+
+    function hide_win_text() {
+        $(".betbox").find(".win-status").hide();
+    }
+    // Handle the "bettingOpen" event from the server
+    socket.on('bettingClosed', () => {
+        isClickActive = false;
+        console.log('bettingClosed')
+        closebet()
+    })
+    var tmpBal
+    socket.on('bettingOpen', (timeLeft) => {
+        // console.log( timeLeft )
+
+        $("#timeLeft").html(timeLeft)
+        if (timeLeft == 12) {
+
+
+            resultbox.className = ``;
+            isClickActive = true;
+            openbet();
+        }
+    });
+
+
+
+    function closebet() {
+        $("#bet-open-div").hide()
+        $(".cancel-btn").hide()
+        $("#bet-close-div").show()
+    }
+
+
+    function openbet() {
+        $(`.box`).removeClass("winning_box")
+        $(".parent").removeClass("lose_box");
+        $(".cancel-btn").hide();
+        show_bet_counter();
+        hide_win_text();
+        $("#bet-close-div").hide()
+        $("#bet-open-div").show()
+        $("#resultdiplay-div").hide()
+        $(".bet-counter").text('')
+        $(".chip-left").hide()
+        $(".timex").text('')
+    }
+
+
+    socket.on('betsUpdate', (data) => {
+        const {
+            betSummary,
+            senderId
+        } = data;
+        console.log(data)
+        const bets = betSummary;
+        // if (senderId == socket.id) return;
+        console.log(bets);
+        [0, 1, 2, 3, 4, 5].forEach(index => {
+            var amount = bets[index];
+            var ii = parseInt(index) + 1;
+            // console.log(`${ii} >> ${amount}`)
+            var chipElement = $(`#chips-${ii}`);
+
+            // if (chipElement.length) { // Ensure the element exists
+            if (amount > 0) {
+                chipElement.show();
+                chipElement.find('.chip-value').html(amount);
+            } else {
+                chipElement.hide();
+            }
+            // }
+        });
+
+    })
+
+
+    socket.on('updatePlayerList', (playerList) => {
+        console.log(playerList)
+        $(".user-column").html('')
+        const userColumn = document.querySelector('.user-column');
+        // Loop through the player list and create HTML elements
+        var ctr = 1;
+        for (let playerId in playerList) {
+            var p = playerList[playerId]
+            if (playerId == socket.id) {
+                // $("h1").html(`<img src="usericon/${ p.avatar }" /> ${ p.username}`)
+                $("#profile-img").prop("src", `usericon/${ p.avatar }`)
+                $("#uid").text(`${ p.username}`)
+
+            } else {
+                // Create the div elements for each player profile
+                const userProfile = document.createElement('div');
+                userProfile.classList.add('user-profile');
+
+                const userIcon = document.createElement('div');
+                userIcon.classList.add('user-icon');
+
+                // Set background image for user-icon
+                userIcon.style.backgroundImage = `url(usericon/${ p.avatar })`;
+                userIcon.style.backgroundSize = 'cover'; // Optional: to ensure image covers the div
+
+                const userName = document.createElement('div');
+                userName.classList.add('user-name');
+                userName.textContent = `${p.username}`; // You can customize this if you want better naming
+
+                // Append the user-icon and user-name to user-profile
+                userProfile.appendChild(userIcon);
+                userProfile.appendChild(userName);
+
+                // Append the user-profile to the user-column
+                userColumn.appendChild(userProfile);
+            }
+
+
+        }
+
+    })
+    socket.on('roundResult', (data) => {
+        console.log(data);
+
+        const {
+            result,
+            players
+        } = data;
+        const playerData = players[socket.id];
+        const won = playerData.won;
+        const balance = playerData.b;
+
+        countdownTime = 12;
+        $(".betting-notification").hide();
+        $("#resultdiplay-div").show();
+        isClickActive = false;
+
+        console.log(`Round result: ${result}`);
+        console.log(`Balance: ${balance}`);
+
+        $(".small-box").removeClass('box1 box2 box3 box4 box5 box6');
+        $("#small-box-1").addClass(`box${result[0]}`);
+        $("#small-box-2").addClass(`box${result[1]}`);
+        $("#small-box-3").addClass(`box${result[2]}`);
+
+        $(".betbox").find(".bet-counter").hide();
+        $(".betbox").find(".win-status").hide();
+
+        $(".win-status").html("");
+        $(".bet-counter").hide();
+        $(".parent").addClass("lose_box");
+        var winning_boxes = [];
+
+        var xCount = result.reduce(function(acc, num) {
+            acc[num] = (acc[num] || 0) + 1;
+            return acc;
+        }, {});
+
+
+        [0, 1, 2].forEach(index => {
+
+            $(`.box${result[index]}`).removeClass('lose_box');
+            var xx = xCount[result[index]];
+            var zx = "";
+            if (xx != 1) zx = `x${xx}`;
+
+            $(`.box${result[index]}`).find(".timex").text(`${zx}`)
+            if (won[result[index]]) {
+
+                $(`.box${result[index]}`).find(".bet-counter").show();
+                $(`.box${result[index]}`).find(".win-status").show().html(
+                    `<small>Win:</small>  ${won[result[index]]}`);
+            }
+        });
+        // Update player's balance
+        tmpBal = balance;
+        setTimeout(() => {
+            animateBalanceIncrease(playerBalance, tmpBal);
+            updateBalance(tmpBal);
+        }, 2000);
+    });
+
+
+
+    show_bet_counter();
+    hide_win_text();
+
+
+    let isClickActive = false;
+    let countdownTime = 12;
+
+
+    function closeNotification() {
+        document.querySelector('.notification').style.display = 'none';
+    }
+
+
+    closeNotification()
+    document.querySelector('.countdown').style.display = 'none';
+
+
+    function cancelbet(eni, betNumber) {
+        $(eni).hide();
+        var betAmount = $(eni).parents(".parent").find(".bet-counter").text();
+        $(eni).parents(".parent").find(".bet-counter").text('');
+        console.log(betNumber)
+        socket.emit('cancelBet', {
+            bet: betNumber
+        });
+        playerBalance += parseInt(betAmount);
+        updateBalance(playerBalance);
+
+    }
+
+
+    // Function to handle bet placement and update the bet counters
+    function sendbet(eni, betNumber) {
+        const betAmount = parseInt(betAmountInput.value);
+        // const betNumber = parseInt(betNumberInput.value);
+
+        // console.log(`You clicked Box ${index + 1}`); 
+        $("#betNumber").val(betNumber + 1)
+
+        if (betNumber >= 1 && betNumber <= 6 && betAmount > 0 && betAmount <= playerBalance) {
+            // Deduct the bet amount from player's balance
+            playerBalance -= betAmount;
+            showNotification(`Bet placed on Box ${betNumber} for $${betAmount}`);
+
+            updateBalance(playerBalance);
+            $(eni).parents(".parent").find(".cancel-btn").show();
+            // Update the bet counter for the selected box
+            const betCounter = document.getElementById(`bet-counter-${betNumber}`);
+            const currentBet = parseInt(betCounter.textContent) || 0;
+            betCounter.textContent = currentBet + betAmount;
+
+            // Emit the bet to the server
+            socket.emit('placeBet', {
+                bet: betNumber,
+                betAmount
+            });
+            // console.log('placeBet', {
+            //     bet: betNumber,
+            //     betAmount
+            // });
+            // console.log('balance', {
+            //     bet: betNumber,
+            //     betAmount
+            // });
+
+            $(eni).parents(".parent").addClass('highlighted');
+
+        } else {
+            //alert('Please enter a valid bet, number (1-6), and ensure sufficient balance.');
+            no_balance()
+        }
+    }
+
+    // Add click event to all boxes
+    const cancelbtn = document.querySelectorAll('.cancel-btn');
+    cancelbtn.forEach((cbtn, index) => {
+        cbtn.addEventListener('click', function() {
+
+            if (!isClickActive) return;
+            // $("#betNumber").val( index + 1 )
+            showNotification(`Bet on Box ${index} canceled`, 'error');
+            cancelbet(this, index + 1);
+
+        });
+    });
+
+    // Add click event to all boxes
+    const boxes = document.querySelectorAll('.betbox');
+    boxes.forEach((box, index) => {
+        box.addEventListener('click', function() {
+
+            if (!isClickActive) return;
+            // Remove highlight from all boxes
+            boxes.forEach(b => b.classList.remove('highlighted'));
+            // Add highlight to the clicked box
+            this.classList.add('highlighted');
+
+            sendbet(this, index + 1);
+
+        });
+    });
+
+    init();
+
+    function init() {
+        $("#resultdiplay-div").hide()
+    }
+
+    function no_balance() {
+
+        const shakeButton = document.getElementById('balance');
+
+
+        shakeButton.classList.add('shake');
+
+        // Remove the shake class after the animation is done
+        shakeButton.addEventListener('animationend', () => {
+            shakeButton.classList.remove('shake');
+        }, {
+            once: true
+        });
+    }
+
+
+    // Function to display notifications (for both success and cancellation)
+    function showNotification(message, type = 'success') {
+        const notificationDiv = document.createElement('div');
+        notificationDiv.classList.add('notification');
+        notificationDiv.classList.add(type); // Can be 'success' or 'error'
+        notificationDiv.textContent = message;
+
+        document.body.appendChild(notificationDiv);
+
+        // Automatically remove after 3 seconds
+        setTimeout(() => {
+            notificationDiv.remove();
+        }, 1000);
+    }
+
+
+    // Function to smoothly animate balance increase
+    function animateBalanceIncrease(currentBalance, newBalance) {
+        const duration = 1000; // Duration of the animation in milliseconds
+        const frameRate = 20; // Update the balance every 20ms
+        const incrementAmount = (newBalance - currentBalance) / (duration /
+            frameRate); // Amount to increment in each frame
+
+        let balance = currentBalance; // Start at current balance
+        const balanceDiv = document.getElementById('balance');
+
+        // Animation loop
+        const interval = setInterval(() => {
+            balance += incrementAmount;
+
+            if (balance >= newBalance) {
+                balance = newBalance; // Ensure we don't exceed the new balance
+                clearInterval(interval); // Stop the animation once balance is reached
+            }
+
+            // Update the balance display
+            balanceDiv.textContent = `Balance: $${balance}`; // Keep two decimal points
+        }, frameRate);
+    }
+    </script>
+
+
+<script>
+    function getPlayerName() {
+    const players = [
+        "CoolGamer", "FastRunner", "SharpShooter", "ProMaster", "LuckyStrike",
+        "SpeedyNinja", "MightyWarrior", "QuickThinker", "SilentHunter", "StarPlayer",
+        "EpicWinner", "StealthAssassin", "SmartStrategist", "FuriousTiger", "LegendKiller",
+        "HeroicKnight", "DarkPhoenix", "LightningBolt", "FearlessLion", "UltimateGamer"
+    ];
+    
+    // Randomly select one player
+    const randomIndex = Math.floor(Math.random() * players.length);
+    // return players[randomIndex];
+    $("#playerName").val(players[randomIndex] )
+}
+
+
+// Append a random query string to the CSS file to prevent caching
+const randomVersion = Math.floor(Math.random() * 100000); // Generate a random number
+    const linkElement = document.getElementById('dynamic-stylesheet');
+    linkElement.href = `css/main.css?v=${randomVersion}`;
+    
+
+getPlayerName();
+
+// Output the selected player
+console.log(getPlayerName());
+
+</script>
+</body>
+
+</html>
