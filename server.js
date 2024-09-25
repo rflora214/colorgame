@@ -39,7 +39,7 @@ const imgs = ["001-koi.png",
 // Initialize Express app
 const app = express();
 app.use(cors({
-    origin: 'http://localhost', // Allow requests from this origin (your client)
+    origin: 'http://134.122.31.110', // Allow requests from this origin (your client)
     methods: ['GET', 'POST'],    // Specify allowed HTTP methods
     allowedHeaders: ['Content-Type'] // Specify allowed headers
 }));
@@ -48,7 +48,7 @@ const emptyBetSlot = [0, 0, 0, 0, 0, 0]
 const server = http.createServer(app);
 const io = socketIo(server, {
     cors: {
-        origin: 'http://localhost', // Allow WebSocket connection from this origin
+        origin: 'http://134.122.31.110', // Allow WebSocket connection from this origin
         methods: ['GET', 'POST']
     }
 });
